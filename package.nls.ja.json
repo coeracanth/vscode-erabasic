@@ -1,3 +1,4 @@
 {
-    "configuration.completionWorkspaceSymbols.description": "ワークスペース内のシンボルを入力補完の対象に含めます。"
+    "configuration.completionWorkspaceSymbols.description": "ワークスペース内のシンボルを入力補完の対象に含めます。",
+    "configuration.completionWorkspaceByMultiProcess.description": "ワークスペース内の探索をマルチプロセスで実行します。"
 }

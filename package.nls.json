@@ -1,3 +1,4 @@
 {
-    "configuration.completionWorkspaceSymbols.description": "Include symbols in the workspace for completion."
+    "configuration.completionWorkspaceSymbols.description": "Include symbols in the workspace for completion.",
+    "configuration.completionWorkspaceByMultiProcess.description": "Performs multi-process search in the workspace."
 }

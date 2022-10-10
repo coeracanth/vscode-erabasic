@@ -65,6 +65,11 @@
                         "default": false,
                         "type": "boolean",
                         "description": "%configuration.completionWorkspaceSymbols.description%"
+                    },
+                    "erabasic.completionWorkspaceByMultiProcess": {
+                        "default": false,
+                        "type": "boolean",
+                        "description": "%configuration.completionWorkspaceByMultiProcess.description%"
                     }
                 }
             }

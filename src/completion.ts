@@ -4231,7 +4231,7 @@ function getName(kind: vscode.CompletionItemKind) {
     return vscode.CompletionItemKind[kind];
 }
 
-function toCompletionItemKind(symbolKind: vscode.SymbolKind):vscode.CompletionItemKind {
+function toCompletionItemKind(symbolKind: vscode.SymbolKind): vscode.CompletionItemKind {
     switch (symbolKind) {
         case vscode.SymbolKind.Variable:
             return vscode.CompletionItemKind.Variable;
