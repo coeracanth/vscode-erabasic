@@ -1,4 +1,4 @@
 {
     "configuration.completionWorkspaceSymbols.description": "Include symbols in the workspace for completion.",
-    "configuration.completionWorkspaceByMultiProcess.description": "Performs multi-process search in the workspace."
+    "configuration.completionWorkspaceByMultiProcess.description": "***experimental***\n\nPerforms search in the workspace in a multi-process manner. Depending on the environment, it may speed up the display of input completion candidates, etc., but it is unstable."
 }
