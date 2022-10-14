@@ -1,7 +1,7 @@
 import { CancellationToken, Hover, HoverProvider, MarkdownString, Position, ProviderResult, SymbolKind, TextDocument, workspace } from "vscode";
 import { Declaration, DeclarationProvider, readDeclarations } from "./declaration";
 
-export class EraHoverProvider implements HoverProvider{
+export class EraHoverProvider implements HoverProvider {
     private repo: HoverRepository;
 
     constructor(private provider: DeclarationProvider) {
@@ -15,7 +15,7 @@ export class EraHoverProvider implements HoverProvider{
 
 function declToHover(decl: Declaration): Hover {
     return new Hover(
-        new MarkdownString(`(${getName(decl.kind)}) ${decl.name}`.concat("\n\n---\n\n",decl.docmentation)),
+        new MarkdownString(`(${getName(decl.kind)}) ${decl.name}`.concat("\n\n---\n\n", decl.documentation)),
         decl.nameRange
     );
 }
@@ -36,7 +36,7 @@ export class HoverRepository {
     constructor(private provider: DeclarationProvider) {
         provider.onDidChange((e) => {
             this.cache.set(e.uri.fsPath, e.decls.filter((d) => d.isGlobal)
-                .map((d) => new HoverInfo( d.name, declToHover(d) )));
+                .map((d) => new HoverInfo(d.name, declToHover(d))));
         });
         provider.onDidDelete((e) => {
             this.cache.delete(e.uri.fsPath);
@@ -87,7 +87,7 @@ export class HoverRepository {
             if (!this.provider.reachable(ws, path)) {
                 continue;
             }
-            
+
             const res = defs.find((d) => d.name === word);
             if (res) {
                 return res.hover;

@@ -102,7 +102,7 @@ export function readDeclarations(input: string): DeclarationObj[] {
                             character: text.length
                         }
                     },
-                    docmentation: docComment,
+                    documentation: docComment,
                 }
                 symbols.push(funcStart);
                 docComment = "";
@@ -138,7 +138,7 @@ export function readDeclarations(input: string): DeclarationObj[] {
                             character: text.length
                         }
                     },
-                    docmentation: docComment,
+                    documentation: docComment,
                 });
                 docComment = "";
                 continue;

@@ -16,7 +16,7 @@ export class Declaration {
         public container: Declaration | undefined,
         public nameRange: Range,
         public bodyRange: Range,
-        public docmentation: string) {
+        public documentation: string) {
     }
 
     get isGlobal(): boolean {
@@ -321,7 +321,7 @@ export class DeclarationProvider implements Disposable {
                             decls.get(decl.container),
                             new Range(decl.nameRange.start.line, decl.nameRange.start.character, decl.nameRange.end.line, decl.nameRange.end.character),
                             new Range(decl.bodyRange.start.line, decl.bodyRange.start.character, decl.bodyRange.end.line, decl.bodyRange.end.character),
-                            decl.docmentation,
+                            decl.documentation,
                         ));
                     }
 
