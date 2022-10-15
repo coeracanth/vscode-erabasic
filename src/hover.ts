@@ -1,4 +1,5 @@
-import { CancellationToken, Hover, HoverProvider, MarkdownString, Position, ProviderResult, SymbolKind, TextDocument, workspace } from "vscode";
+import { CancellationToken, CompletionItem, CompletionItemKind, Hover, HoverProvider, MarkdownString, Position, ProviderResult, SymbolKind, TextDocument, workspace } from "vscode";
+import { BuiltinComplationItems } from "./completion";
 import { Declaration, DeclarationProvider, readDeclarations } from "./declaration";
 
 export class EraHoverProvider implements HoverProvider {
@@ -17,6 +18,20 @@ function declToHover(decl: Declaration): Hover {
     return new Hover(
         new MarkdownString(`(${getName(decl.kind)}) ${decl.name}`.concat("\n\n---\n\n", decl.documentation))
     );
+}
+
+function completionToHover(item: CompletionItem) {
+    const doc = item.documentation;
+    let content;
+    if (typeof (doc) === "string") {
+        content = doc;
+    } else {
+        content = doc.value;
+    }
+    const detail = item.detail ? item.detail : `(${CompletionItemKind[item.kind]}) ${item.label}`;
+    return new Hover(
+        new MarkdownString(detail.concat("\n\n---\n\n", content)),
+    )
 }
 
 function getName(kind: SymbolKind) {
@@ -54,6 +69,15 @@ export class HoverRepository {
         if (word === undefined) {
             return;
         }
+
+        {
+            const res = this.findInBuiltIn(document, position, word);
+            if (res) {
+                res.range = getWordRange(document, position);
+                return res;
+            }
+        }
+
         const res = this.findInCurrentDocument(document, position, word);
         if (res) {
             res.range = getWordRange(document, position);
@@ -102,6 +126,14 @@ export class HoverRepository {
         if (range !== undefined) {
             return document.getText(range);
         }
+    }
+
+    private findInBuiltIn(document: TextDocument, position: Position, word: string): Hover {
+        const res = BuiltinComplationItems.find(c => c.label === word);
+        if (!res) {
+            return undefined;
+        }
+        return completionToHover(res);
     }
 
     private findInCurrentDocument(document: TextDocument, position: Position, word: string): Hover {
