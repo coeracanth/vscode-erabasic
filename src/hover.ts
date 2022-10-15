@@ -15,8 +15,7 @@ export class EraHoverProvider implements HoverProvider {
 
 function declToHover(decl: Declaration): Hover {
     return new Hover(
-        new MarkdownString(`(${getName(decl.kind)}) ${decl.name}`.concat("\n\n---\n\n", decl.documentation)),
-        decl.nameRange
+        new MarkdownString(`(${getName(decl.kind)}) ${decl.name}`.concat("\n\n---\n\n", decl.documentation))
     );
 }
 
@@ -57,6 +56,7 @@ export class HoverRepository {
         }
         const res = this.findInCurrentDocument(document, position, word);
         if (res) {
+            res.range = getWordRange(document, position);
             return res;
         }
 
@@ -80,6 +80,7 @@ export class HoverRepository {
 
             const res = this.findInDocument(doc, word);
             if (res) {
+                res.range = getWordRange(document, position);
                 return res
             }
         }
@@ -90,13 +91,14 @@ export class HoverRepository {
 
             const res = defs.find((d) => d.name === word);
             if (res) {
+                res.hover.range = getWordRange(document, position);
                 return res.hover;
             }
         }
     }
 
     private getWord(document: TextDocument, position: Position): string {
-        const range = document.getWordRangeAtPosition(position, /[^\s\x21-\x2f\x3a-\x40\x5b-\x5e\x7b-\x7e]+/);
+        const range = getWordRange(document, position);
         if (range !== undefined) {
             return document.getText(range);
         }
@@ -120,3 +122,8 @@ export class HoverRepository {
         return declToHover(res);
     }
 }
+
+function getWordRange(document: TextDocument, position: Position): import("vscode").Range {
+    return document.getWordRangeAtPosition(position, /[^\s\x21-\x2f\x3a-\x40\x5b-\x5e\x7b-\x7e]+/);
+}
+
