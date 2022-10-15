@@ -18,7 +18,7 @@ export class CompletionCsvItemRepository {
      * @example
      * TALENT:HOGE => ["TALENT:HOGE", "TALENT"]
      */
-    private readonly regVar = /(\w+|[^\x00-\x7F]+)(?::\(.*\)|:[^:\W]*)*:[^\s\(\)]*$/;
+    private readonly regVar = /(\w+|[^\x00-\x7F]+)(?::\(.*\)|:[^:\W]*)*:[^\s\(\){%}]*$/;
 
     constructor(private provider: CsvDeclarationProvider) {
         provider.onDidChange((e) => {
