@@ -64,12 +64,25 @@
                     "erabasic.completionWorkspaceSymbols": {
                         "default": false,
                         "type": "boolean",
-                        "description": "%configuration.completionWorkspaceSymbols.description%"
+                        "markdownDescription": "%configuration.completionWorkspaceSymbols.description%"
                     },
                     "erabasic.completionWorkspaceByMultiProcess": {
                         "default": false,
                         "type": "boolean",
-                        "description": "%configuration.completionWorkspaceByMultiProcess.description%"
+                        "markdownDescription": "%configuration.completionWorkspaceByMultiProcess.description%"
+                    },
+                    "erabasic.sortVariableNames": {
+                        "default": "id",
+                        "type": "string",
+                        "enum": [
+                            "id",
+                            "name"
+                        ],
+                        "markdownDescription": "%configuration.sortVariableNames.description%",
+                        "markdownEnumDescriptions": [
+                            "%configuration.sortVariableNames.enumdescription.id%",
+                            "%configuration.sortVariableNames.enumdescription.name%"
+                        ]
                     }
                 }
             }

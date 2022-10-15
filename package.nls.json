@@ -1,4 +1,7 @@
 {
     "configuration.completionWorkspaceSymbols.description": "Include symbols in the workspace for completion.",
-    "configuration.completionWorkspaceByMultiProcess.description": "***experimental***\n\nPerforms search in the workspace in a multi-process manner. Depending on the environment, it may speed up the display of input completion candidates, etc., but it is unstable."
+    "configuration.completionWorkspaceByMultiProcess.description": "***experimental***\n\nPerforms search in the workspace in a multi-process manner. Depending on the environment, it may speed up the display of input completion candidates, etc., but it is unstable.",
+    "configuration.sortVariableNames.description": "Specify the sort key when completing the input of the definition name in CSV.",
+    "configuration.sortVariableNames.enumdescription.id": "",
+    "configuration.sortVariableNames.enumdescription.name": ""
 }
