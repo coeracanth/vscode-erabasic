@@ -13,6 +13,13 @@ export class CompletionCsvItemRepository {
     private cache: Map<string, CompletionCsvItem[]> = new Map();
     private options = new EraBasicOption();
 
+    /**
+     * 変数表記を取得する。
+     * @example
+     * TALENT:HOGE => ["TALENT:HOGE", "TALENT"]
+     */
+    private readonly regVar = /(\w+|[^\x00-\x7F]+)(?::\(.*\)|:[^:\W]*)*:[^\s\(\)]*$/;
+
     constructor(private provider: CsvDeclarationProvider) {
         provider.onDidChange((e) => {
             this.cache.set(e.uri.fsPath, e.decls.map((d) => declToCompletionItem(d, { sort: this.options.sortVariableNames })));
@@ -36,7 +43,7 @@ export class CompletionCsvItemRepository {
         }
 
         const linePrefix = document.lineAt(position).text.slice(0, position.character);
-        const match = /(\w+)(?::\(.*\)|:[^:\W]*)*:[^\s\(\)]*$/.exec(linePrefix)
+        const match = this.regVar.exec(linePrefix)
         if (!match) {
             return;
         }
@@ -48,7 +55,7 @@ export class CompletionCsvItemRepository {
 
     public isCsvCompletion(document: TextDocument, position: Position): boolean {
         const linePrefix = document.lineAt(position).text.slice(0, position.character);
-        return /(\w+)(?::\(.*\)|:[^:\W]*)*:[^\s\(\)]*$/.test(linePrefix)
+        return this.regVar.test(linePrefix)
     }
 }
 
