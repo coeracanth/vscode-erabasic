@@ -4,9 +4,11 @@ All notable changes to the "erabasic" extension will be documented in this file.
 ## [0.5.0-alpha.1] - 2022-10-xx
 ### Added
 - コード補完時のドキュメントを追加
-- hover の範囲を修正
 - CSV定義の要素名をコード補完に追加
 - "_"から始まるシンボルをプライベートシンボルとみなして補完対象にしないオプションを追加
+
+### Fixed
+- hover の範囲を修正
 
 ## [0.5.0-alpha] - 2022-10-10
 ### Added
