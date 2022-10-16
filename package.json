@@ -71,6 +71,11 @@
                         "type": "boolean",
                         "markdownDescription": "%configuration.completionWorkspaceByMultiProcess.description%"
                     },
+                    "erabasic.completionPrivateFunction": {
+                        "default": true,
+                        "type": "boolean",
+                        "markdownDescription": "%configuration.completionPrivateFunction.description%"
+                    },
                     "erabasic.sortVariableNames": {
                         "default": "id",
                         "type": "string",

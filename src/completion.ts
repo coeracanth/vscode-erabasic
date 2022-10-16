@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 
 import { CompletionItem, CompletionItemKind, CompletionItemTag, MarkdownString, Position, TextDocument } from "vscode";
 import { Declaration, DeclarationProvider, readDeclarations } from "./declaration";
+import { EraBasicOption } from "./extension";
 
 const Keyword = CompletionItemKind.Keyword;
 const Control = CompletionItemKind.Keyword;
@@ -4601,6 +4602,7 @@ export const BuiltinComplationItems = localizedComplationItems([
 
 export class CompletionItemRepository {
     private cache: Map<string, NLSCompletionItem[]> = new Map();
+    private options = new EraBasicOption();
 
     constructor(private provider: DeclarationProvider) {
         provider.onDidChange((e) => {
@@ -4654,7 +4656,7 @@ export class CompletionItemRepository {
             if (!this.provider.reachable(ws, path)) {
                 continue;
             }
-            yield* defs.filter((d) => d).map((d) => d);
+            yield* defs.filter((d) => this.options.completionPrivateFunction || !d.label.startsWith('_'));
         }
     }
 

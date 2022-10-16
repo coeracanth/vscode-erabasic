@@ -104,4 +104,7 @@ export class EraBasicOption {
     public get sortVariableNames(): string {
         return vscode.workspace.getConfiguration("erabasic").get("sortVariableNames", "id");
     }
+    public get completionPrivateFunction(): boolean {
+        return vscode.workspace.getConfiguration("erabasic").get("completionPrivateFunction", true);
+    }
 }
