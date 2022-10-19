@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "erabasic" extension will be documented in this file.
 
-## [0.5.0-alpha.1] - 2022-10-xx
+## [0.5.0-alpha.1] - 2022-10-19
 ### Added
 - コード補完時のドキュメントを追加
 - CSV定義の要素名をコード補完に追加
