@@ -1,6 +1,6 @@
 {
     "configuration.completionWorkspaceSymbols.description": "ワークスペース内のシンボルを入力補完の対象に含めます。",
-    "configuration.completionWorkspaceByMultiProcess.description": "***実験的機能です。***\n\nワークスペース内の探索をマルチプロセスで実行します。\n環境によっては入力補完の候補表示などが高速化するかもしれませんが、不安定です。",
+    "configuration.completionWorkspaceByMultiProcess.description": "***実験的機能です。***\n\nワークスペース内の探索をマルチスレッドで実行します。\n環境によっては入力補完の候補表示などが高速化するかもしれませんが、不安定です。",
     "configuration.completionPrivateFunction.description": "オフにした場合、識別子が\"`_`\"から始まるシンボルをプライベートシンボルとみなし、ファイル外での定義だった場合に補完対象に含めません。",
     "configuration.sortVariableNames.description": "CSVでの定義名を入力補完する時のソートのキーを指定します。",
     "configuration.sortVariableNames.enumdescription.id": "番号順",
