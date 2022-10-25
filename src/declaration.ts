@@ -49,9 +49,9 @@ function* iterlines(input: string): IterableIterator<[number, string]> {
 
 export function readDeclarations(input: string): Declaration[] {
     const symbols: Declaration[] = [];
-    let funcStart: Declaration;
-    let funcEndLine: number;
-    let funcEndChar: number;
+    let funcStart: Declaration | undefined;
+    let funcEndLine: number | undefined;
+    let funcEndChar: number | undefined;
     let docComment: string = "";
     for (const [line, text] of iterlines(input)) {
 
@@ -132,7 +132,7 @@ class BuiltinDeclarationFiles {
 }
 
 export class WorkspaceEncoding {
-    private encoding: string[][];
+    private encoding: string[][] = [];
 
     public get encodings(): string[][] {
         return this.encoding;
@@ -152,12 +152,21 @@ export class WorkspaceEncoding {
         if (data[0] === 0xfe && data[1] === 0xff) {
             return "utf16be";
         }
-        return this.encoding.find((v) => path.startsWith(v[0]))[1];
+        const encode = this.encoding.find((v) => path.startsWith(v[0]));
+        if (!encode) {
+            return "utf8";
+        }
+        return encode[1];
     }
 
     public reset() {
         this.encoding = [];
-        for (const folder of vscode.workspace.workspaceFolders) {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders) {
+            return;
+        }
+
+        for (const folder of workspaceFolders) {
             this.encoding.push([folder.uri.fsPath, this.getConfiguration(folder.uri)]);
         }
     }
@@ -186,7 +195,7 @@ export class DeclarationProvider implements Disposable {
 
     private dirty: Map<string, Uri> = new Map();
 
-    private syncing: Promise<void>;
+    private syncing: Promise<void> | undefined;
 
     private builtin: BuiltinDeclarationFiles;
     private encoding: WorkspaceEncoding;
@@ -234,7 +243,7 @@ export class DeclarationProvider implements Disposable {
         return path.startsWith(ws.uri.fsPath) || this.builtin.has(path);
     }
 
-    public isBuiltin(path): boolean {
+    public isBuiltin(path:string): boolean {
         return this.builtin.has(path);
     }
 
@@ -314,16 +323,19 @@ export class DeclarationProvider implements Disposable {
                 }
                 if (this.dirty.delete(rec.path)) {
                     const decls: Map<string, Declaration> = new Map();
-                    for (const decl of rec.declarations) {
-                        decls.set(decl.name, new Declaration(
-                            decl.name,
-                            decl.kind,
-                            decls.get(decl.container),
-                            new Range(decl.nameRange.start.line, decl.nameRange.start.character, decl.nameRange.end.line, decl.nameRange.end.character),
-                            new Range(decl.bodyRange.start.line, decl.bodyRange.start.character, decl.bodyRange.end.line, decl.bodyRange.end.character),
-                            decl.documentation,
-                        ));
+                    if (rec.declarations) {
+                        for (const decl of rec.declarations) {
+                            decls.set(decl.name, new Declaration(
+                                decl.name,
+                                decl.kind,
+                                decl.container ? decls.get(decl.container) : undefined,
+                                new Range(decl.nameRange.start.line, decl.nameRange.start.character, decl.nameRange.end.line, decl.nameRange.end.character),
+                                new Range(decl.bodyRange.start.line, decl.bodyRange.start.character, decl.bodyRange.end.line, decl.bodyRange.end.character),
+                                decl.documentation,
+                            ));
+                        }
                     }
+
 
                     this.onDidChangeEmitter.fire(new DeclarationChangeEvent(Uri.file(rec.fspath), [...decls.values()]));
                 }

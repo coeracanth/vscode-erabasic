@@ -26,6 +26,10 @@ function* iterlines(input: string): IterableIterator<[number, string]> {
 
 export function readDeclarations(input: string, fileName: string): CsvDeclaration[] {
     const fileNameMatch = fileName.match(/([^\\\/@]*)@?(\d*).[Cc][Ss][Vv]$/);
+    if (!fileNameMatch) {
+        return [];
+    }
+
     const variableName = fileNameMatch[1].toUpperCase();
     const dimension = fileNameMatch[2] ? Number(fileNameMatch[2]) : 0;
 
@@ -77,7 +81,7 @@ export class CsvDeclarationProvider implements Disposable {
 
     private dirty: Map<string, Uri> = new Map();
 
-    private syncing: Promise<void>;
+    private syncing: Promise<void> | undefined;
 
     private encoding: WorkspaceEncoding;
 

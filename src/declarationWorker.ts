@@ -26,7 +26,13 @@ Promise.all(wkdata.dirty.map(async ([path, fspath]): Promise<WorkerResponse> => 
     }
 
     return { path: path, fspath: fspath, declarations: readDeclarations(input) };
-})).then(res => parentPort.postMessage(res));
+})).then(res => {
+    if(!parentPort){
+        return;
+    }
+
+    parentPort.postMessage(res)
+});
 
 export interface WorkerResponse {
     path: string;
@@ -47,16 +53,16 @@ interface RangeObj {
 }
 
 export interface DeclarationObj extends Omit<Declaration, "visible" | "isGlobal" | "container" | "bodyRange" | "nameRange"> {
-    container: string | null;
+    container: string | undefined;
     bodyRange: RangeObj;
     nameRange: RangeObj;
 }
 
 export function readDeclarations(input: string): DeclarationObj[] {
     const symbols: DeclarationObj[] = [];
-    let funcStart: DeclarationObj;
-    let funcEndLine: number;
-    let funcEndChar: number;
+    let funcStart: DeclarationObj | undefined;
+    let funcEndLine: number | undefined;
+    let funcEndChar: number | undefined;
     let docComment: string = "";
     for (const [line, text] of iterlines(input)) {
         const commentMatch = /\s*;{3}(@\S+)?(.*)/.exec(text);
@@ -164,7 +170,12 @@ function detect(path: string, data: Buffer, encodings: string[][]): string {
     if (data[0] === 0xfe && data[1] === 0xff) {
         return "utf16be";
     }
-    return encodings.find((v) => path.startsWith(v[0]))[1];
+    const encode = encodings.find((v) => path.startsWith(v[0]));
+    if (!encode) {
+        return "utf8";
+    }
+
+    return encode[1];
 }
 
 function* iterlines(input: string): IterableIterator<[number, string]> {

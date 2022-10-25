@@ -71,7 +71,7 @@ export class DefinitionRepository {
         }
     }
 
-    private getWord(document: TextDocument, position: Position): string {
+    private getWord(document: TextDocument, position: Position): string | undefined {
         const range = document.getWordRangeAtPosition(position, /[^\s\x21-\x2f\x3a-\x40\x5b-\x5e\x7b-\x7e]+/);
         if (range !== undefined) {
             return document.getText(range);

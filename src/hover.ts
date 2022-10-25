@@ -9,7 +9,7 @@ export class EraHoverProvider implements HoverProvider {
         this.repo = new HoverRepository(provider);
     }
 
-    provideHover(document: TextDocument, position: Position, token: CancellationToken): Promise<Hover> {
+    provideHover(document: TextDocument, position: Position, token: CancellationToken): Promise<Hover | undefined> {
         return this.repo.sync().then(() => this.repo.find(document, position));
     }
 }
@@ -23,12 +23,14 @@ function declToHover(decl: Declaration): Hover {
 function completionToHover(item: CompletionItem) {
     const doc = item.documentation;
     let content;
-    if (typeof (doc) === "string") {
+    if (!doc) {
+        content = "";
+    } else if (typeof (doc) === "string") {
         content = doc;
     } else {
         content = doc.value;
     }
-    const detail = item.detail ? item.detail : `(${CompletionItemKind[item.kind]}) ${item.label}`;
+    const detail = item.detail ? item.detail : `(${item.kind ? CompletionItemKind[item.kind] : ""}) ${item.label}`;
     return new Hover(
         new MarkdownString(detail.concat("\n\n---\n\n", content)),
     )
@@ -64,7 +66,7 @@ export class HoverRepository {
         return this.provider.sync();
     }
 
-    public find(document: TextDocument, position: Position): Hover {
+    public find(document: TextDocument, position: Position): Hover | undefined {
         const word = this.getWord(document, position);
         if (word === undefined) {
             return;
@@ -121,14 +123,14 @@ export class HoverRepository {
         }
     }
 
-    private getWord(document: TextDocument, position: Position): string {
+    private getWord(document: TextDocument, position: Position): string | undefined {
         const range = getWordRange(document, position);
         if (range !== undefined) {
             return document.getText(range);
         }
     }
 
-    private findInBuiltIn(document: TextDocument, position: Position, word: string): Hover {
+    private findInBuiltIn(document: TextDocument, position: Position, word: string): Hover | undefined {
         const res = BuiltinComplationItems.find(c => c.label === word);
         if (!res) {
             return undefined;
@@ -136,7 +138,7 @@ export class HoverRepository {
         return completionToHover(res);
     }
 
-    private findInCurrentDocument(document: TextDocument, position: Position, word: string): Hover {
+    private findInCurrentDocument(document: TextDocument, position: Position, word: string): Hover | undefined {
         const res = readDeclarations(document.getText())
             .find((d) => d.name === word && d.visible(position));
         if (!res) {
@@ -145,7 +147,7 @@ export class HoverRepository {
         return declToHover(res);
     }
 
-    private findInDocument(document: TextDocument, word: string): Hover {
+    private findInDocument(document: TextDocument, word: string): Hover | undefined {
         const res = readDeclarations(document.getText())
             .find((d) => d.name === word && d.isGlobal);
         if (!res) {
@@ -155,7 +157,7 @@ export class HoverRepository {
     }
 }
 
-function getWordRange(document: TextDocument, position: Position): import("vscode").Range {
+function getWordRange(document: TextDocument, position: Position): import("vscode").Range | undefined {
     return document.getWordRangeAtPosition(position, /[^\s\x21-\x2f\x3a-\x40\x5b-\x5e\x7b-\x7e]+/);
 }
 

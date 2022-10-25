@@ -3,7 +3,7 @@ import { EraBasicOption } from "../extension";
 import { CsvDeclaration, CsvDeclarationProvider, readDeclarations } from "./declaration";
 
 
-class CompletionCsvItem extends CompletionItem {
+interface CompletionCsvItem extends CompletionItem {
     // CompletionItemでcacheしてるので補完候補の選別に必要な情報を持ち越す
     variableName: string;
     dimension: number;

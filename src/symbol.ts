@@ -8,7 +8,7 @@ function declToSymbolInformation(uri: Uri, decl: Declaration): SymbolInformation
     return new SymbolInformation(
         decl.name,
         decl.kind,
-        decl.container?.name,
+        decl.container?.name ?? "",
         new Location(uri, decl.bodyRange),
     );
 }
@@ -61,7 +61,7 @@ export class SymbolInformationRepository {
         }
     }
 
-    private compileQuery(query: string): RegExp {
+    private compileQuery(query: string): RegExp | undefined {
         if (query.length === 0) {
             return;
         }
