@@ -9,6 +9,7 @@ export default class Dim {
 	public prefix: Set<string>;
 	public size: Expr[];
 	public value?: Expr[];
+	public readonly documentation?:string;
 
 	public constructor(
 		name: string,

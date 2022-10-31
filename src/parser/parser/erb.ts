@@ -187,6 +187,14 @@ export default function parseERB(files: Map<string, string>, macros: Set<string>
 function parseFn(lines: Slice[], from: number): [Fn, number] {
 	let index = from;
 
+	// skip comment
+	while (lines.length > index) {
+		if (lines[index].content.startsWith("@")) {
+			break;
+		}
+		index += 1;
+	}
+
 	// Prepare definition, property and body of function
 	const defIndex = index;
 	index += 1;
@@ -199,12 +207,17 @@ function parseFn(lines: Slice[], from: number): [Fn, number] {
 		index += 1;
 	}
 
-	const bodyIndex = index;
+	const bodyFirstIndex = index;
+	let bodyLastIndex = index;
 	while (lines.length > index) {
 		if (lines[index].content.startsWith("@")) {
 			break;
 		}
 		index += 1;
+		if (lines[index].content.match(/\s*;/)) {
+			continue;
+		}
+		bodyLastIndex += 1;
 	}
 
 	const argParser = U.sepBy0(",", P.seq(
@@ -222,18 +235,35 @@ function parseFn(lines: Slice[], from: number): [Fn, number] {
 		P.succeed([]),
 	)));
 
+	const documentation = parseDoc(lines.slice(from,defIndex))
+
 	const definition = U.tryParse(defParser, lines[defIndex]);
 
 	const property: Property[] = [];
-	for (let i = propIndex; i < bodyIndex; ++i) {
+	for (let i = propIndex; i < bodyFirstIndex; ++i) {
 		property.push(U.tryParse(prop, lines[i]));
 	}
-	const [body] = parseThunk(lines.slice(bodyIndex, index), 0);
+	const [body] = parseThunk(lines.slice(bodyFirstIndex, bodyLastIndex), 0);
 
+	const consumeLength = bodyLastIndex - from;
 	return [
-		new Fn(definition[0], definition[1], property, body),
-		index - from,
+		new Fn(definition[0], definition[1], property, body, documentation),
+		consumeLength,
 	];
+}
+
+function parseDoc(lines:Slice[]) {
+	const parser = P.string(";;;").then(P.any);
+
+	return lines.map((line)=>{
+		const res = parser.parse(line.get())
+		if (!res.status) {
+			return ""
+		}
+
+	return res.value
+	}).filter((comment)=> comment.length).join("\n\n")
+
 }
 
 export function parseThunk(

@@ -10,12 +10,14 @@ export default class Fn {
 	public arg: Array<[Variable, Variable | string | bigint | null]>;
 	public property: Property[];
 	public thunk: Thunk;
+	public readonly documentation?: string;
 
-	public constructor(name: string, arg: Fn["arg"], property: Property[], thunk: Thunk) {
+	public constructor(name: string, arg: Fn["arg"], property: Property[], thunk: Thunk, doc?:string) {
 		this.name = name;
 		this.arg = arg;
 		this.thunk = thunk;
 		this.property = property;
+		this.documentation = doc;
 
 		this.thunk.labelMap.set(Fn.START_OF_FN, 0);
 	}

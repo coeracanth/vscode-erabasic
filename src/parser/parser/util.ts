@@ -22,6 +22,12 @@ export function not(...exclude: string[]) {
 	});
 }
 
+/**
+ * 0個以上の分割された要素
+ * @param sep 区切り文字
+ * @param parser 
+ * @returns 
+ */
 export function sepBy0<T>(sep: string, parser: P.Parser<T>): P.Parser<T[]> {
 	return P.sepBy(parser, P.string(sep).trim(C.WS0));
 }

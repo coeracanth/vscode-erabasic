@@ -12,7 +12,13 @@ const SPECIAL_CHAR = [
 
 // eslint-disable-next-line no-irregular-whitespace
 const WS = P.oneOf([" ", "\t", "　"].join(""));
+/**
+ * 0個以上のwhiteSpace
+ */
 export const WS0 = WS.many().map(() => null);
+/**
+ * 1個以上のwhiteSpace
+ */
 export const WS1 = WS.atLeast(1).map(() => null);
 export const Identifier = P.noneOf(SPECIAL_CHAR.join("")).atLeast(1).tie();
 export const UInt = P.alt(

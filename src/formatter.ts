@@ -6,8 +6,9 @@ export class EraFormatter implements DocumentFormattingEditProvider {
         
     }
     provideDocumentFormattingEdits(document: TextDocument, options: FormattingOptions, token: CancellationToken): ProviderResult<TextEdit[]> {
-        const hoge = parseERB(new Map([["test",document.getText()]]),new Set());
+        const hoge = parseERB(new Map([["target",document.getText()]]),new Set());
         console.log(hoge);
+
 
         return [];
     }
