@@ -11,6 +11,7 @@ import { CsvDeclarationProvider } from "./csv/declaration";
 import { Declaration, DeclarationProvider, readDeclarations } from "./declaration";
 import { DefinitionRepository } from "./definition";
 import { EraHoverProvider } from "./hover";
+import { EraFormatter } from "./formatter";
 import { readSymbolInformations, SymbolInformationRepository } from "./symbol";
 
 export function activate(context: ExtensionContext) {
@@ -22,6 +23,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider(selector, new EraBasicDocumentSymbolProvider()));
     context.subscriptions.push(vscode.languages.registerWorkspaceSymbolProvider(new EraBasicWorkspaceSymbolProvider(provider)));
     context.subscriptions.push(vscode.languages.registerHoverProvider(selector, new EraHoverProvider(provider)));
+    context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider(selector, new EraFormatter()));
     context.subscriptions.push(provider, csvProvider);
 }
 

@@ -94,11 +94,13 @@
         ]
     },
     "dependencies": {
-        "iconv-lite": "^0.4.24"
+        "iconv-lite": "^0.4.24",
+        "parsimmon": "^1.18.1"
     },
     "devDependencies": {
         "@types/node": "^12.12.0",
         "@types/vscode": "^1.34.0",
+        "@types/parsimmon": "^1.10.6",
         "tslint": "^5.19.0",
         "typescript": "^3.8.3"
     }
