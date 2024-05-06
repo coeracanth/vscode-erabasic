@@ -35,6 +35,9 @@ function localizedComplationItems(items: NLSCompletionItem[]): CompletionItem[] 
 
 // PRINT系を埋めて力尽きただけなので、気の向くまま埋めちゃって下されば取り込みます。
 // もちろん、日本語だけ、英語だけ、detailなんか無くてもOK！
+/**
+ * EmuEra組み込み関数などの入力補完候補
+ */
 export const BuiltinComplationItems = localizedComplationItems([
     {
         label: "PRINT",
@@ -4600,6 +4603,9 @@ export const BuiltinComplationItems = localizedComplationItems([
     },
 ]);
 
+/**
+ * 入力補完候補のキャッシュ
+ */
 export class CompletionItemRepository {
     private cache: Map<string, NLSCompletionItem[]> = new Map();
     private options = new EraBasicOption();
@@ -4673,6 +4679,11 @@ export class CompletionItemRepository {
     }
 }
 
+/**
+ * 宣言から入力補完候補の生成
+ * @param decreation 
+ * @returns 
+ */
 export function declToCompletionItem(decreation: Declaration): NLSCompletionItem {
     const symbolKind = decreation.kind;
     let kind: vscode.CompletionItemKind = toCompletionItemKind(symbolKind);

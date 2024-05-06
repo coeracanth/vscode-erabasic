@@ -4,15 +4,27 @@ import { Location, Position, TextDocument, Uri } from "vscode";
 
 import { Declaration, DeclarationProvider, readDeclarations } from "./declaration";
 
+/**
+ * 宣言からの定義生成
+ * @param uri 
+ * @param decl 
+ * @returns 
+ */
 function declToDefinition(uri: Uri, decl: Declaration): Location {
     return new Location(uri, decl.nameRange);
 }
 
+/**
+ * 定義
+ */
 class DefinitionInfo {
     constructor(public name: string, public location: Location) {
     }
 }
 
+/**
+ * 定義のキャッシュ
+ */
 export class DefinitionRepository {
     private cache: Map<string, DefinitionInfo[]> = new Map();
 
