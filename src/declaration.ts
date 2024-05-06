@@ -9,9 +9,6 @@ import { Worker } from "worker_threads";
 import { WorkerResponse } from "./declarationWorker";
 import { EraBasicOption } from "./extension";
 
-/**
- * 宣言
- */
 export class Declaration {
     constructor(
         public name: string,
@@ -50,11 +47,6 @@ function* iterlines(input: string): IterableIterator<[number, string]> {
     }
 }
 
-/**
- * ERB, ERHファイルからの宣言の読み込み
- * @param input 
- * @returns 
- */
 export function readDeclarations(input: string): Declaration[] {
     const symbols: Declaration[] = [];
     let funcStart: Declaration | undefined;
@@ -188,17 +180,11 @@ export class WorkspaceEncoding {
     }
 }
 
-/**
- * 宣言の変更検知
- */
 export class DeclarationChangeEvent {
     constructor(public uri: Uri, public decls: Declaration[]) {
     }
 }
 
-/**
- * 宣言の削除検知
- */
 export class DeclarationDeleteEvent {
     constructor(public uri: Uri) {
     }

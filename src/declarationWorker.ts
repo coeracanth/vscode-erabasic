@@ -4,8 +4,6 @@ import { Uri } from "vscode";
 import { parentPort, workerData } from "worker_threads";
 import { Declaration } from "./declaration";
 
-// 別プロセスに切り出すために無理やりファイル分けした、コピペで既存と実装が重複してるので整理すべき
-
 const wkdata: { dirty: [[string, string]], encodings: string[][] } = workerData;
 
 Promise.all(wkdata.dirty.map(async ([path, fspath]): Promise<WorkerResponse> => {
@@ -36,9 +34,6 @@ Promise.all(wkdata.dirty.map(async ([path, fspath]): Promise<WorkerResponse> => 
     parentPort.postMessage(res)
 });
 
-/**
- * ワーカープロセスからの終了時レスポンス
- */
 export interface WorkerResponse {
     path: string;
     fspath: string;
@@ -63,11 +58,6 @@ export interface DeclarationObj extends Omit<Declaration, "visible" | "isGlobal"
     nameRange: RangeObj;
 }
 
-/**
- * ファイル中身から宣言を生成
- * @param input ファイルから読み込んだ文字列
- * @returns 
- */
 export function readDeclarations(input: string): DeclarationObj[] {
     const symbols: DeclarationObj[] = [];
     let funcStart: DeclarationObj | undefined;
@@ -170,13 +160,6 @@ export function readDeclarations(input: string): DeclarationObj[] {
     return symbols;
 }
 
-/**
- * ファイルデータのエンコード判定
- * @param path ファイルパス
- * @param data ファイル中身
- * @param encodings エンコード指定
- * @returns 
- */
 function detect(path: string, data: Buffer, encodings: string[][]): string {
     if (data[0] === 0xef && data[1] === 0xbb && data[2] === 0xbf) {
         return "utf8";

@@ -2,18 +2,13 @@ import { CompletionItem, CompletionItemKind, CompletionItemTag, MarkdownString, 
 import { EraBasicOption } from "../extension";
 import { CsvDeclaration, CsvDeclarationProvider, readDeclarations } from "./declaration";
 
-/**
- * CSV定義からの入力補完候補要素
- */
+
 interface CompletionCsvItem extends CompletionItem {
     // CompletionItemでcacheしてるので補完候補の選別に必要な情報を持ち越す
     variableName: string;
     dimension: number;
 }
 
-/**
- * 入力補完候補のキャッシュ
- */
 export class CompletionCsvItemRepository {
     private cache: Map<string, CompletionCsvItem[]> = new Map();
     private options = new EraBasicOption();
@@ -95,12 +90,6 @@ function getRelatedVariableName(name: string) {
     }
 }
 
-/**
- * CSVで宣言された要素から入力補完候補を生成
- * @param decreation 
- * @param options 
- * @returns 
- */
 export function declToCompletionItem(decreation: CsvDeclaration, options: { sort: string } = { sort: "id" }): CompletionCsvItem {
     return {
         label: decreation.name,
@@ -113,12 +102,6 @@ export function declToCompletionItem(decreation: CsvDeclaration, options: { sort
     };
 }
 
-/**
- * 表示するCSV定義の表示順取得
- * @param key 
- * @param decreation 
- * @returns 
- */
 function getSortText(key: string, decreation: CsvDeclaration) {
     switch (key) {
         case "name":

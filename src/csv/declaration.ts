@@ -3,9 +3,7 @@ import * as iconv from "iconv-lite";
 import { Disposable, Event, EventEmitter, ExtensionContext, Uri, workspace, WorkspaceFolder } from "vscode";
 import { WorkspaceEncoding } from "../declaration";
 
-/**
- * CSVで宣言された要素
- */
+
 export interface CsvDeclaration {
     id: number;
     name: string;
@@ -26,12 +24,6 @@ function* iterlines(input: string): IterableIterator<[number, string]> {
     }
 }
 
-/**
- * CSVファイルからの宣言要素の読み込み
- * @param input 
- * @param fileName 
- * @returns 
- */
 export function readDeclarations(input: string, fileName: string): CsvDeclaration[] {
     const fileNameMatch = fileName.match(/([^\\\/@]*)@?(\d*).[Cc][Ss][Vv]$/);
     if (!fileNameMatch) {
@@ -74,17 +66,11 @@ export function readDeclarations(input: string, fileName: string): CsvDeclaratio
     return symbols;
 }
 
-/**
- * CSV宣言の変更検知
- */
 export class CsvDeclarationChangeEvent {
     constructor(public uri: Uri, public decls: CsvDeclaration[]) {
     }
 }
 
-/**
- * CSV宣言の削除検知
- */
 export class CsvDeclarationDeleteEvent {
     constructor(public uri: Uri) {
     }

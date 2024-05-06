@@ -14,22 +14,12 @@ export class EraHoverProvider implements HoverProvider {
     }
 }
 
-/**
- * 宣言からホバー要素を生成
- * @param decl 
- * @returns 
- */
 function declToHover(decl: Declaration): Hover {
     return new Hover(
         new MarkdownString(`(${getName(decl.kind)}) ${decl.name}`.concat("\n\n---\n\n", decl.documentation))
     );
 }
 
-/**
- * 入力補完候補からホバー要素を生成
- * @param item 
- * @returns 
- */
 function completionToHover(item: CompletionItem) {
     const doc = item.documentation;
     let content;
@@ -50,17 +40,12 @@ function getName(kind: SymbolKind) {
     return SymbolKind[kind];
 }
 
-/**
- * ホバー要素
- */
 class HoverInfo {
     constructor(public name: string, public hover: Hover) {
     }
 }
 
-/**
- * ホバー要素のキャッシュ
- */
+
 export class HoverRepository {
     private cache: Map<string, HoverInfo[]> = new Map();
 

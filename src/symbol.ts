@@ -4,12 +4,6 @@ import { Location, SymbolInformation, TextDocument, Uri } from "vscode";
 
 import { Declaration, DeclarationProvider, readDeclarations } from "./declaration";
 
-/**
- * 宣言からシンボル生成
- * @param uri 
- * @param decl 
- * @returns 
- */
 function declToSymbolInformation(uri: Uri, decl: Declaration): SymbolInformation {
     return new SymbolInformation(
         decl.name,
@@ -19,19 +13,10 @@ function declToSymbolInformation(uri: Uri, decl: Declaration): SymbolInformation
     );
 }
 
-/**
- * ファイルからシンボルの読み込み
- * @param uri 
- * @param input 
- * @returns 
- */
 export function readSymbolInformations(uri: Uri, input: string): SymbolInformation[] {
     return readDeclarations(input).map((d) => declToSymbolInformation(uri, d));
 }
 
-/**
- * シンボルのキャッシュ
- */
 export class SymbolInformationRepository {
     private cache: Map<string, SymbolInformation[]> = new Map();
 
